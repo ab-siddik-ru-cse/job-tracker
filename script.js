@@ -95,6 +95,19 @@ function updateDashboardStats(filteredCount) {
     document.getElementById('tab-job-count').innerText = `${filteredCount} of ${total}`;
 }
 
+function toggleJobStatus(id, newStatus) {
+    const jobIndex = jobs.findIndex(job => job.id === id);
+    
+    if (jobIndex !== -1) {
+        if (jobs[jobIndex].status === newStatus) {
+            jobs[jobIndex].status = 'PENDING';
+        } else {
+            jobs[jobIndex].status = newStatus;
+        }
+        renderJobs();
+    }
+}
+
 function setFilter(filterType) {
     currentFilter = filterType;
 
