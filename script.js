@@ -81,3 +81,89 @@ let jobs = [
     }
 ];
 
+
+
+function renderJobs() {
+    const container = document.getElementById('jobs-card');
+    container.innerHTML = '';
+
+    let filteredJobs = jobs;
+    if (currentFilter !== 'ALL') {
+        filteredJobs = jobs.filter(job => job.status === currentFilter);
+    }
+
+    updateDashboardStats(filteredJobs.length);
+
+    if (filteredJobs.length === 0) {
+        container.innerHTML = `
+                    <div class="w-full py-16 px-4 bg-white border border-gray-100 rounded-xl shadow-sm text-center flex flex-col items-center justify-center">
+                        <div class="w-24 h-24 mb-4">
+                            <img class="mx-auto block mb-6" src="jobs.png" alt="">
+                        </div>
+                        <h2 class="text-2xl font-bold text-[#002C5C] mb-2">No Jobs Available</h2>
+                        <p class="text-gray-500 mx-auto">Try adjusting your filters or check back later for new opportunities.</p>
+                    </div>
+                `;
+        return;
+    }
+
+    filteredJobs.forEach(job => {
+        const isInterview = job.status === 'INTERVIEW';
+        const isRejected = job.status === 'REJECTED';
+
+        const interviewBtnStyle = isInterview
+            ? 'bg-emerald-500 text-white border-emerald-500 shadow-md transform'
+            : 'bg-white text-emerald-500 border-emerald-500 hover:bg-emerald-50';
+
+        const rejectedBtnStyle = isRejected
+            ? 'bg-rose-500 text-white border-rose-500 shadow-md transform'
+            : 'bg-white text-rose-500 border-rose-500 hover:bg-rose-50';
+
+        let statusBadge = `<span class="px-5 py-2.5 rounded bg-blue-100 text-blue-800 text-xs font-bold tracking-wider uppercase">Not Applied</span>`;
+        if (isInterview) statusBadge = `<span class="px-5 py-2.5 rounded bg-emerald-100 text-emerald-800 text-xs font-bold tracking-wider uppercase">Interview</span>`;
+        if (isRejected) statusBadge = `<span class="px-5 py-2.5 rounded bg-rose-100 text-rose-800 text-xs font-bold tracking-wider uppercase">Rejected</span>`;
+
+        const cardHTML = `
+                    <div class="w-full bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 rounded-xl flex flex-col md:flex-row gap-6 relative group">
+                        
+                        <div class="flex-1 space-y-3">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                <div>
+                                    <h1 class="text-xl text-[#002C5C] font-extrabold flex items-center gap-3">
+                                        ${job.company}
+                                    </h1>
+                                    <p class="text-gray-600 font-medium text-lg mt-1">${job.role}</p>
+                                </div>
+                                
+                            </div>
+                            
+                            <p class="text-gray-500 text-sm font-medium flex items-center gap-2">
+                                 ${job.salary}
+                            </p>
+                            <div class="self-start sm:self-center">
+                                    ${statusBadge}
+                                </div>
+                            <p class="text-gray-600 leading-relaxed text-sm">${job.details}</p>
+                            
+                            <div class="flex flex-wrap gap-3">
+                                <button onclick="toggleJobStatus(${job.id}, 'INTERVIEW')" class="btn-transition px-5 py-2 rounded-lg border-2 font-semibold text-sm cursor-pointer uppercase ${interviewBtnStyle}">
+                                    Interview
+                                </button>
+                                <button onclick="toggleJobStatus(${job.id}, 'REJECTED')" class="btn-transition px-5 py-2 rounded-lg border-2 font-semibold text-sm cursor-pointer uppercase ${rejectedBtnStyle}">
+                                    Rejected
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="absolute top-6 right-6 md:static md:mt-0">
+                            <button onclick="deleteJob(${job.id})" title="Delete Job" class="w-10 h-10 flex items-center justify-center border-2 border-gray-200 text-gray-500 rounded-full hover:border-rose-500 hover:text-rose-500 transition-all cursor-pointer">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+        container.insertAdjacentHTML('beforeend', cardHTML);
+    });
+}
+
+renderJobs();
