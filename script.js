@@ -108,6 +108,11 @@ function toggleJobStatus(id, newStatus) {
     }
 }
 
+function deleteJob(id) {
+    jobs = jobs.filter(job => job.id !== id);
+    renderJobs();
+}
+
 function setFilter(filterType) {
     currentFilter = filterType;
 
