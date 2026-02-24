@@ -95,6 +95,21 @@ function updateDashboardStats(filteredCount) {
     document.getElementById('tab-job-count').innerText = `${filteredCount} of ${total}`;
 }
 
+function setFilter(filterType) {
+    currentFilter = filterType;
+
+    const buttons = ['ALL', 'INTERVIEW', 'REJECTED'];
+    buttons.forEach(btn => {
+        const el = document.getElementById(`filter-${btn}`);
+        if (btn === filterType) {
+            el.className = `filter-btn px-6 py-2.5 rounded-lg bg-blue-600 border border-gray-200 text-white font-semibold shadow-sm hover:bg-blue-700 btn-transition`;
+        } else {
+            el.className = `filter-btn px-6 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-700 font-semibold hover:bg-gray-50 btn-transition`;
+        }
+    });
+
+    renderJobs();
+}
 
 
 function renderJobs() {
