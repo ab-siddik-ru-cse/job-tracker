@@ -1,3 +1,5 @@
+let currentFilter = 'ALL';
+
 let jobs = [
     {
         id: 1,
@@ -80,6 +82,18 @@ let jobs = [
         details: 'Build interactive web applications using modern JavaScript frameworks and integrate with third-party APIs.'
     }
 ];
+
+
+function updateDashboardStats(filteredCount) {
+    const total = jobs.length;
+    const interviewCount = jobs.filter(job => job.status === 'INTERVIEW').length;
+    const rejectedCount = jobs.filter(job => job.status === 'REJECTED').length;
+
+    document.getElementById('total-count').innerText = total;
+    document.getElementById('interview-count').innerText = interviewCount;
+    document.getElementById('rejected-count').innerText = rejectedCount;
+    document.getElementById('tab-job-count').innerText = `${filteredCount} of ${total}`;
+}
 
 
 
